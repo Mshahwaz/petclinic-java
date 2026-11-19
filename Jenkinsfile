@@ -49,7 +49,7 @@ pipeline {
 			echo "=== Check for .m2 inside workspace ==="
 			find . -maxdepth 4 -type d -name ".m2"
 			
-			mvn -B clean verify'''
+			mvn -B -Dmaven.repo.local=/tmp/maven-repository clean verify '''
                     }
                 }
             }
