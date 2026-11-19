@@ -1,5 +1,9 @@
-FROM openjdk:17-jdk-slim
+FROM eclipse-temurin:17-jre
+
 WORKDIR /app
-COPY /target/*.jar ./java.jar
+
+COPY target/*.jar app.jar
+
 EXPOSE 8080
-CMD ["java", "-jar", "java.jar"]
+
+ENTRYPOINT ["java","-jar","app.jar"]
