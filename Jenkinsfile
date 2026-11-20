@@ -34,22 +34,24 @@ pipeline {
                 script {
                     docker.image('maven:3.9.9-eclipse-temurin-17').inside {
                         sh '''
-			echo "=== Workspace ==="
-			pwd
+        						set -eux
 
-			echo "=== Home ==="
-			echo "$HOME"
+				        		echo "=== Removing old Maven cache from workspace ==="
+						        rm -rf -- './?/.m2'
 
-			echo "=== Maven local repository ==="
-			mvn help:evaluate -Dexpression=settings.localRepository -q -DforceStdout
-
-			echo "=== Workspace directories ==="
-			find . -maxdepth 3 -type d | head -50
-
-			echo "=== Check for .m2 inside workspace ==="
-			find . -maxdepth 4 -type d -name ".m2"
-			
-			mvn -B -Dmaven.repo.local=/tmp/maven-repository clean verify '''
+						        echo "=== Maven local repository ==="
+						        mvn -B -Dmaven.repo.local=/tmp/maven-repository \
+						            help:evaluate \
+						            -Dexpression=settings.localRepository \
+						            -q -DforceStdout
+						
+						        echo
+						        echo "=== Checking workspace for .m2 ==="
+						        find . -maxdepth 4 -type d -name ".m2" -print
+						
+						        echo "=== Build and Test ==="
+						        mvn -B -Dmaven.repo.local=/tmp/maven-repository clean verify 
+						'''
                     }
                 }
             }
