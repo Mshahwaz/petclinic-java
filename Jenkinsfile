@@ -48,6 +48,39 @@ pipeline {
                 }
             }
         }
+		
+		stage('SAST - SonarQube') {
+		    steps {
+		        withCredentials([
+		            string(
+		                credentialsId: 'sonarqube-token',
+		                variable: 'SONAR_TOKEN'
+		            )
+		        ]) {
+		            script {
+		                docker.image(
+		                    'maven:3.9.9-eclipse-temurin-21'
+		                ).inside(
+		                    '--network host -v /var/lib/jenkins/mvm-rep:/mvm-rep'
+		                ) {
+		                    sh '''
+		                        set -eu
+		
+		                        echo "=== SonarQube Analysis ==="
+		
+		                        mvn -B \
+		                          -Dmaven.repo.local=/mvn-repository \
+		                          org.sonarsource.scanner.maven:sonar-maven-plugin:5.5.0.6356:sonar \
+		                          -Dsonar.projectKey=petclinic \
+		                          -Dsonar.host.url=http://127.0.0.1:9000 \
+		                          -Dsonar.java.source=17
+		                    '''
+		                }
+		            }
+		        }
+		    }
+		}
+
     }
 
     post {
