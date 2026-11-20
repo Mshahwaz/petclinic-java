@@ -61,7 +61,7 @@ pipeline {
 		                docker.image(
 		                    'maven:3.9.9-eclipse-temurin-21'
 		                ).inside(
-		                    '--network host -v /var/lib/jenkins/maven-repository:/maven-repository -v /var/lib/jenkins/sonar-cache:/sonar-cache'
+		                    '--network host -v /var/lib/jenkins/mvn-rep:/mvn-rep -v /var/lib/jenkins/sonar-cache:/sonar-cache'
 		                ) {
 		                    sh '''
 		                        set -eu
@@ -69,7 +69,7 @@ pipeline {
 		                        echo "=== SonarQube Analysis ==="
 		
 		                        mvn -B \
-		                          -Dmaven.repo.local=/maven-repository \
+		                          -Dmaven.repo.local=/mvn-rep \
 		                          org.sonarsource.scanner.maven:sonar-maven-plugin:5.5.0.6356:sonar \
 		                          -Dsonar.projectKey=petclinic \
 		                          -Dsonar.host.url=http://127.0.0.1:9000 \
