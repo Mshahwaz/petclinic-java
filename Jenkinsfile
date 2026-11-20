@@ -65,7 +65,23 @@ pipeline {
 		                ) {
 		                    sh '''
 		                        set -eu
-		
+								echo "=== Checking SonarQube Token ==="
+							
+							    if [ -z "${SONAR_TOKEN:-}" ]; then
+							        echo "ERROR: SONAR_TOKEN is not available"
+							        exit 1
+							    fi
+							
+							    RESPONSE=$(curl -sS \
+							        -u "${SONAR_TOKEN}:" \
+							        http://127.0.0.1:9000/api/authentication/validate)
+							
+							    if echo "$RESPONSE" | grep -q '"valid":true'; then
+							        echo "SUCCESS: SonarQube token authentication is valid"
+							    else
+							        echo "ERROR: SonarQube rejected the token"
+							        exit 1
+							    fi
 		                        echo "=== SonarQube Analysis ==="
 		
 		                        mvn -B \
