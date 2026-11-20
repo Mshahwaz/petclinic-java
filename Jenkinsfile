@@ -32,25 +32,17 @@ pipeline {
         stage('Build and Test') {
             steps {
                 script {
-                    docker.image('maven:3.9.9-eclipse-temurin-17').inside {
+                    docker.image('maven:3.9.9-eclipse-temurin-17').inside('-v /var/lib/jenkins/mvn-rep:/mvn-rep'){
                         sh '''
-        						set -eux
-
-				        		echo "=== Removing old Maven cache from workspace ==="
-						        rm -rf -- './?/.m2'
-
+								set -eux
 						        echo "=== Maven local repository ==="
-						        mvn -B -Dmaven.repo.local=/tmp/maven-repository \
-						            help:evaluate \
+						        mvn help:evaluate \
 						            -Dexpression=settings.localRepository \
+									-Dmaven.repo.local=/mvn-rep \
 						            -q -DforceStdout
 						
-						        echo
-						        echo "=== Checking workspace for .m2 ==="
-						        find . -maxdepth 4 -type d -name ".m2" -print
-						
 						        echo "=== Build and Test ==="
-						        mvn -B -Dmaven.repo.local=/tmp/maven-repository clean verify 
+						        mvn -B -Dmaven.repo.local=/mvn-rep clean verify 
 						'''
                     }
                 }
