@@ -56,6 +56,10 @@ pipeline {
                 testResults: 'target/surefire-reports/*.xml',
                 allowEmptyResults: true
             )
+			archiveArtifacts artifacts: 'target/*.jar, target/site/**', allowEmptyArchive: true
+
+        	// 3. Now it is safe to wipe the entire workspace
+        	cleanWs()
         }
 
         success {
