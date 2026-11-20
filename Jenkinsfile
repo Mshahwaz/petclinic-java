@@ -61,7 +61,7 @@ pipeline {
 		                docker.image(
 		                    'maven:3.9.9-eclipse-temurin-21'
 		                ).inside(
-		                    '--network host -v /var/lib/jenkins/mvm-rep:/mvm-rep'
+		                    '--network host -v /var/lib/jenkins/mvn-rep:/mvn-rep'
 		                ) {
 		                    sh '''
 		                        set -eu
