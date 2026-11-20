@@ -90,7 +90,8 @@ pipeline {
 		                          -Dsonar.projectKey=petclinic \
 		                          -Dsonar.host.url=http://127.0.0.1:9000 \
 		                          -Dsonar.java.source=17 \
-		                          -Dsonar.userHome=/sonar-cache
+		                          -Dsonar.userHome=/sonar-cache \
+								  -Dsonar.token="$SONAR_TOKEN"
 		                    '''
 		                }
 		            }
