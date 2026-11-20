@@ -67,13 +67,15 @@ pipeline {
 		                        set -eu
 		
 		                        echo "=== SonarQube Analysis ==="
-		
-		                        mvn -B \
-		                          -Dmaven.repo.local=/mvn-rep \
-		                          org.sonarsource.scanner.maven:sonar-maven-plugin:5.5.0.6356:sonar \
-		                          -Dsonar.projectKey=petclinic \
-		                          -Dsonar.host.url=http://127.0.0.1:9000 \
-		                          -Dsonar.java.source=17
+
+							     mvn -B \
+								  -Dmaven.repo.local=/mvn-rep \
+								  -Dsonar.userHome=/tmp/.sonar \
+								  test-compile \
+								  org.sonarsource.scanner.maven:sonar-maven-plugin:5.5.0.6356:sonar \
+								  -Dsonar.projectKey=petclinic \
+								  -Dsonar.host.url=http://127.0.0.1:9000 \
+								  -Dsonar.java.source=17
 		                    '''
 		                }
 		            }
