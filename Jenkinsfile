@@ -11,7 +11,7 @@ pipeline {
         // Fill these values when ready
         GIT_REPOSITORY = 'https://github.com/Mshahwaz/petclinic-java.git'
         GIT_BRANCH = 'main'
-		IMAGE_ID = "petclinic:${env.GIT_COMMIT,take(7)}"
+		IMAGE_ID = "petclinic:${env.GIT_COMMIT.take(7)}"
     }
 
     stages {
