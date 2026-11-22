@@ -11,7 +11,6 @@ pipeline {
         // Fill these values when ready
         GIT_REPOSITORY = 'https://github.com/Mshahwaz/petclinic-java.git'
         GIT_BRANCH = 'main'
-		IMAGE_ID = "petclinic:${env.GIT_COMMIT.take(7)}"
     }
 
     stages {
@@ -28,6 +27,9 @@ pipeline {
                 git branch: "${GIT_BRANCH}",
                     url: "${GIT_REPOSITORY}"
             }
+				script {
+                    env.IMAGE_ID = "petclinic:${sh(script: 'git rev-parse --short HEAD', returnStdout: true).trim()}"
+                }
         }
 
         stage('Build and Test') {
