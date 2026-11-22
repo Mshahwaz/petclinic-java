@@ -153,6 +153,42 @@ pipeline {
 				'''
 			}
 		}
+		stage('Push Image to ECR Public') {
+	    environment {
+	        ECR_PUBLIC_URI = 'public.ecr.aws/m3f2d4v8/petclinic'
+	        AWS_REGION = 'us-east-1'
+	    }
+	
+	    steps {
+	        sh '''
+	            set -eu
+				
+	            REMOTE_IMAGE="${ECR_PUBLIC_URI}:$(git rev-parse --short HEAD)"
+	
+	            echo "=== Verifying AWS Identity ==="
+	            aws sts get-caller-identity
+	
+	            echo "=== Authenticating with ECR Public ==="
+	            ECR_PASSWORD="$(aws ecr-public get-login-password \
+	                --region "$AWS_REGION")"
+	
+	            printf '%s' "$ECR_PASSWORD" | docker login \
+	                --username AWS \
+	                --password-stdin public.ecr.aws
+	
+	            unset ECR_PASSWORD
+	
+	            echo "=== Tagging Docker Image ==="
+	            docker tag "$IMAGE_TAG" "$REMOTE_IMAGE"
+	
+	            echo "=== Pushing Docker Image ==="
+	            docker push "$REMOTE_IMAGE"
+	
+	            echo "=== Push Completed ==="
+	            echo "$REMOTE_IMAGE"
+	        '''
+	    }
+	}
     }
 
     post {
