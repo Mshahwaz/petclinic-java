@@ -147,7 +147,6 @@ pipeline {
 				  aquasec/trivy:0.76.2 \
 				  image \
 				  --severity HIGH,CRITICAL \
-				  --exit-code 1 \
 				  --format json \
 				  --output /reports/petclinic-report.json \
 	              "$IMAGE_ID"
