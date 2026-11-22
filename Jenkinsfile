@@ -179,7 +179,7 @@ pipeline {
 	            unset ECR_PASSWORD
 	
 	            echo "=== Tagging Docker Image ==="
-	            docker tag "$IMAGE_TAG" "$REMOTE_IMAGE"
+	            docker tag "$IMAGE_ID" "$REMOTE_IMAGE"
 	
 	            echo "=== Pushing Docker Image ==="
 	            docker push "$REMOTE_IMAGE"
