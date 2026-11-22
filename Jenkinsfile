@@ -120,6 +120,15 @@ pipeline {
                 allowEmptyResults: true
             )
 			archiveArtifacts artifacts: 'target/*.jar, target/site/**', allowEmptyArchive: true
+			publishHTML(target: [
+	            reportDir: 'target',
+	            reportFiles: 'dependency-check-report.html',
+	            reportName: 'OWASP Dependency-Check Report',
+	            reportTitles: 'Dependency-Check Report',
+	            keepAll: true,
+	            alwaysLinkToLastBuild: true,
+	            allowMissing: false
+        ])
 
         }
 
