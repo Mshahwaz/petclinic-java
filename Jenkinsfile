@@ -26,10 +26,10 @@ pipeline {
 
                 git branch: "${GIT_BRANCH}",
                     url: "${GIT_REPOSITORY}"
-            }
 				script {
                     env.IMAGE_ID = "petclinic:${sh(script: 'git rev-parse --short HEAD', returnStdout: true).trim()}"
                 }
+            }
         }
 
         stage('Build and Test') {
