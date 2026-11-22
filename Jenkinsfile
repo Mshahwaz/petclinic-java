@@ -110,7 +110,31 @@ pipeline {
 		            }
 		        }
 		    }
-		}	
+		}
+		stage('Docker Image Build'){
+			steps {
+				sh '''
+				set -eu
+
+				echo "=========Validating Docker Build Inputs========"
+
+				test -f Dockerfile
+				test -f target/*.jar
+
+				echo "=========Building Docker Image================="
+
+				IMAGE_ID="petclinic:$(git rev-parse --short HEAD)"
+
+				docker build -t "$IMAGE_ID" .
+
+				echo "=========Verifying Docker Image================"
+
+				docker image inspect "$IMAGE_ID" --format 'Image ID: {{.Id}}'
+
+				docker images "$IMAGE_ID"
+				'''
+			}
+		}
     }
 
     post {
