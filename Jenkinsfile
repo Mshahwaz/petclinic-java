@@ -135,6 +135,24 @@ pipeline {
 				'''
 			}
 		}
+		stage('Trivy Image Scanning'){
+			steps {
+				sh '''
+				set -eu
+				docker run --rm \
+				  -v /var/run/docker.sock:/var/run/docker.sock \
+				  -v /var/lib/jenkins/trivy-cache:/root/.cache/ \
+				  -v /var/lib/jenkins/trivy-reports:/reports \
+				  aquasec/trivy:0.76.2 \
+				  image \
+				  --severity HIGH,CRITICAL \
+				  --exit-code 1 \
+				  --format json \
+				  --output /reports/petclinic-report.json \
+	              "$IMAGE_ID"
+				'''
+			}
+		}
     }
 
     post {
