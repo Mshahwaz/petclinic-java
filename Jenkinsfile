@@ -11,6 +11,7 @@ pipeline {
         // Fill these values when ready
         GIT_REPOSITORY = 'https://github.com/Mshahwaz/petclinic-java.git'
         GIT_BRANCH = 'main'
+		IMAGE_ID = "petclinic:${env.GIT_COMMIT,take(7)}"
     }
 
     stages {
@@ -122,8 +123,6 @@ pipeline {
 				test -f target/*.jar
 
 				echo "=========Building Docker Image================="
-
-				IMAGE_ID="petclinic:$(git rev-parse --short HEAD)"
 
 				docker build -t "$IMAGE_ID" .
 
