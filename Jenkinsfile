@@ -81,7 +81,36 @@ pipeline {
 		        }
 		    }
 		}
-
+		stage('SCA - Dependency Check') {
+		    steps {
+		        withCredentials([
+		            string(
+		                credentialsId: 'nvd-api-key',
+		                variable: 'NVD_API_KEY'
+		            )
+		        ]) {
+		            script {
+		                docker.image(
+		                    'maven:3.9.9-eclipse-temurin-17'
+		                ).inside(
+		                    '-v /var/lib/jenkins/mvn-rep:/mvn-rep -v /var/lib/jenkins/dependency-check-data:/dependency-check-data'
+		                ) {
+		                    sh '''
+		                        set -eu
+		
+		                        echo "=== SCA - Dependency Check ==="
+		
+		                        mvn -B \
+		                          -Dmaven.repo.local=/mvn-rep \
+		                          -DnvdApiKeyEnvironmentVariable=NVD_API_KEY \
+		                          -Ddata.directory=/dependency-check-data \
+		                          org.owasp:dependency-check-maven:12.1.0:check
+		                    '''
+		                }
+		            }
+		        }
+		    }
+		}	
     }
 
     post {
