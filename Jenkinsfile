@@ -104,7 +104,7 @@ pipeline {
 		                          -Dmaven.repo.local=/mvn-rep \
 		                          -DnvdApiKeyEnvironmentVariable=NVD_API_KEY \
 		                          -Ddata.directory=/dependency-check-data \
-		                          org.owasp:dependency-check-maven:12.1.0:check
+		                          org.owasp:dependency-check-maven:12.2.2:check
 		                    '''
 		                }
 		            }
